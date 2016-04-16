@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src='libraries/jquery-2.2.1.min.js' ></script>
+<script src='libraries/jquery.feedToJSON.js'></script>
+
+<style>
+html * { font-family: 'Helvetica Neue', 'Helvetica'; color: white; background-color: black; }
+.weekend { border: 2px solid white; }
+#topRight { position: fixed; top: 0px; right: 20px; width: 350px; height: 600px; }
+#clock { top: 0px; right: 10px; font-size: 70px; }
+#date { right:20px; font-size: 10px; }
+#tempTable { top: 120px; right: 20px; }
+img { width: 30px; height: 30px; }
+
+td { padding: 5px; width: 30 px; text-align: center; }
+</style>
+
+<script>
+//Customizable Parameters
+var param = {
+  'URL' : window.location.protocol + '//' + window.location.host + '/' +
+  		  window.location.pathname.split( '/' ),
+//Weather Parameters
+  'wth' : {
+    'units'     : 'imperial',
+    'city'      : 'Indianapolis,US',
+    'APPID'     : 'adba8abb4bb5be6b9ba17ce92de0e2be',
+    'version'   : '2.5',
+    'freq'      : '60000',
+    'callDelay' : '1000',
+  },
+//Clock Parameters
+  'clk' : {
+    'freq'   : '3000',
+  },
+//News Parameters
+  'nws' : {
+	'feed'   : 'http://feeds.reuters.com/reuters/topNews',
+	'freq'   : '60000',
+  },
+//gCal Parameters
+  'cal' : {
+    'gmail'     : 'readbookslauren@gmail.com',
+    'gmailpass' : 'dominican',
+  },	
+//Twitter Parameters
+  'twt' : {
+    'twthandle'        : 'mgcmrrr',
+    'twtpass'          : 'mirrormirror',
+	'freq'             : '60000',
+	'tweetTimeout'     : '604800000',
+  },
+}
+
+var functions = {
+  'init':function(){
+    this.getWeather();
+	setTimeout(this.getForecast, param.wth.callDelay); 
+	this.getTimeDate();
+	this.getNews();
+	this.getTweets();
+  },
+}
+
+functions.getWeather = function() {
+  $.ajax({
+    type: 'GET',
+    url: 'http://api.openweathermap.org/data/' + param.wth.version + '/weather?q=' +
+        param.wth.city + '&units=' + param.wth.units + '&appid=' + param.wth.APPID, 
+    dataType: 'json',
+    success: function (data) {
+      document.getElementById('tempToday').innerHTML = Math.round(data.main.temp);
+	  setTimeout(functions.getWeather, param.wth.freq);
+    }
+  })
+}
+
+functions.getForecast = function() {
+  $.ajax({
+    type: 'GET',
+    url: 'http://api.openweathermap.org/data/' + param.wth.version + '/forecast/daily?q=' +
+        param.wth.city + '&units=' + param.wth.units + '&cnt=7&appid=' + param.wth.APPID, 
+    dataType: 'json',
+    success: function (data) {
+      for(x=0; x<=6; x++) {
+        document.getElementById('tempMin'+x).innerHTML = Math.round(data.list[x].temp.min);
+	    document.getElementById('tempMax'+x).innerHTML = Math.round(data.list[x].temp.max);
+	    var img = "<img src=images/"+data.list[x].weather[0].main+".png />";
+	    document.getElementById('status'+x).innerHTML = img.toLowerCase();
+	  }
+	  
+	  //Puts boxes around the weekend
+	  var toDay = new Date().getDay();
+	  var weekDays = Array(7); 
+	  for (x=0; x<=6; x++) {
+	    y = x + toDay;
+	    if (y > 6) { y = y - 7; }
+	    weekDays[y] = x;
+	  }
+	  document.getElementById('day' + weekDays[0]).setAttribute('class', 'weekend');
+      document.getElementById('day' + weekDays[6]).setAttribute('class', 'weekend');
+	  setTimeout(functions.getForecast, param.wth.freq);
+    }
+  })
+}
+ 
+functions.getTimeDate = function() {
+  var d      = new Date()
+  var hour   = d.getHours();
+  var minute = d.getMinutes();
+  var date   = d.getDate();
+  var month  = d.getMonth();
+  var year   = d.getFullYear();
+  var day    = d.getDay();
+  var months = ['January','February','March','April','May','June','July',
+                'August','September','October','November','December'];
+  var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var ampm   = "am";
+  var ordSuf = 0;
+
+  if (date < 10 || date > 20) {
+    switch (date % 10) {
+      case 1:    ordSuf = 'st'; break;
+      case 2:    ordSuf = 'nd'; break;
+      case 3:    ordSuf = 'rd'; break;
+      default:   ordSuf = 'th'; break;
+    }} else {
+      ordSuf = 'th';
+    } 
+  
+  if (hour > 12) {
+    hour = hour - 12;
+    ampm = "pm";
+  } else if (hour == 0) {
+    hour = 12;
+  }
+  
+  minute = ("0" + minute).slice(-2); 
+  document.getElementById('clock').innerHTML = hour + ":" + minute + " " + ampm;
+  document.getElementById('date').innerHTML = days[day] + ", " + months[month] + " " +
+    date + ordSuf + ", " + year;
+  setTimeout(functions.getTimeDate, param.clk.freq);
+}
+
+functions.getNews = function() {
+  $.feedToJson({
+  feed: param.nws.feed,
+  success: function(data){
+    for(x=0; x<=9; x++) {
+      document.getElementById('news'+x).innerHTML = data.item[x].title;
+    }
+    setTimeout(functions.getNews, param.nws.freq);
+    }
+  });
+}
+
+functions.getTweets = function() {
+  $.ajax({
+    url: 'getTweets.php',
+    type: 'GET',
+    dataType: 'json',
+    success: function(data) {
+      console.log(data);
+      var tweetDate   = Date.parse(data[0].created_at);
+      var currentDate = Date.parse(new Date());
+      if (currentDate - tweetDate < param.twt.tweetTimeout) {
+        document.getElementById("tweet0").innerHTML = data[0].text;
+      } else {
+      document.getElementById("tweet0").innerHTML = 'No New Tweets!';
+      }
+      setTimeout(functions.getTweets, param.twt.freq);
+    }
+  })
+}
+</script>
+</head>
+
+<body onload='functions.init()'>
+
+<div id = 'topRight'>
+<div id='clock'>Time</div>
+<div id='date'>Date</div>
+
+<table id='tempTable'>
+  <tr>
+    <td id='tempToday' colspan='2'>Temp</td>
+    <td>
+      <table id = "day0">
+        <tr>
+          <td id = "tempMax0">Hi</td>
+        </tr>
+        <tr>
+          <td id = "tempMin0">Low</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <table id="day1">
+        <tr>
+          <td id = "tempMax1">Hi</td>
+          <td id = "tempMin1">Low</td>
+          <td id = "status1">Status</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <table id="day2">
+        <tr>
+          <td id = "tempMax2">Hi</td>
+          <td id = "tempMin2">Low</td>
+          <td id = "status2">Status</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <table id="day3">
+        <tr>
+          <td id = "tempMax3">Hi</td>
+          <td id = "tempMin3">Low</td>
+          <td id = "status3">Status</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td  colspan="3">
+      <table id="day4">
+        <tr>
+          <td id = "tempMax4">Hi</td>
+          <td id = "tempMin4">Low</td>
+          <td id = "status4">Status</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <table id="day5">
+        <tr>
+          <td id = "tempMax5">Hi</td>
+          <td id = "tempMin5">Low</td>
+          <td id = "status5">Status</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <table id="day6">
+        <tr>
+          <td id = "tempMax6">Hi</td>
+          <td id = "tempMin6">Low</td>
+          <td id = "status6">Status</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</div>
+
+<p id="status0">Status</p>
+
+<div id = "newsSection">
+  <p id = "news9">News</p>
+  <p id = "news8">News</p>
+  <p id = "news7">News</p>
+  <p id = "news6">News</p>
+  <p id = "news5">News</p>
+  <p id = "news4">News</p>
+  <p id = "news3">News</p>
+  <p id = "news2">News</p>
+  <p id = "news1">News</p>
+  <p id = "news0">News</p>
+</div>
+
+<div id = "tweets">
+  <p id = "tweet0">Tweet</p>
+</div>
+
+</body>
+</html>
