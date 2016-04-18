@@ -12,6 +12,7 @@ html * { font-family: 'Helvetica Neue', 'Helvetica'; color: white; background-co
 #clock { top: 0px; right: 10px; font-size: 70px; }
 #date { right:20px; font-size: 10px; }
 #tempTable { right: 25px; }
+#newsSection { left: 20px; bottom: 20px; color: linear-gradient(black, white) }
 img { width: 30px; height: 30px; }
 
 td { padding: 5px; width: 30 px; text-align: center; }
@@ -162,7 +163,6 @@ functions.getTweets = function() {
     type: 'GET',
     dataType: 'json',
     success: function(data) {
-      console.log(data);
       var tweetDate   = Date.parse(data[0].created_at);
       var currentDate = Date.parse(new Date());
       if (currentDate - tweetDate < param.twt.tweetTimeout) {
