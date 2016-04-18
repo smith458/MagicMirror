@@ -14,17 +14,6 @@ html * { font-family: 'Helvetica Neue', 'Helvetica'; color: white; background-co
 #tempTable { right: 25px; }
 #newsSection { position: fixed; left: 30px; bottom: 25px; opacity: .5; }
 img { width: 30px; height: 30px; }
-#news0 { opacity: 1.0; }
-#news1 { opacity:  .9; }
-#news2 { opacity:  .8; }
-#news3 { opacity:  .7; }
-#news4 { opacity:  .6; }
-#news5 { opacity:  .5; }
-#news6 { opacity:  .4; }
-#news7 { opacity:  .3; }
-#news8 { opacity:  .2; }
-#news9 { opacity:  .1; }
-
 td { padding: 5px; width: 30 px; text-align: center; }
 </style>
 
@@ -71,7 +60,7 @@ var functions = {
 	setTimeout(this.getForecast, param.wth.callDelay); 
 	this.getTimeDate();
 	this.getNews();
-	this.getTweets();
+	//this.getTweets();
   },
 }
 
@@ -161,6 +150,7 @@ functions.getNews = function() {
   success: function(data){
     for(x=0; x<=9; x++) {
       document.getElementById('news'+x).innerHTML = data.item[x].title;
+	  document.getElementById('news'+x).style.opacity = (1 - (.1 * x));
     }
     setTimeout(functions.getNews, param.nws.freq);
     }
