@@ -8,11 +8,12 @@
 <style>
 html * { font-family: 'Helvetica Neue', 'Helvetica'; color: white; background-color: black; }
 .weekend { border: 2px solid white; }
-#topRight { position: fixed; top: 0px; right: 20px; width: 350px; height: 600px; }
-#clock { top: 0px; right: 10px; font-size: 70px; }
-#date { right:20px; font-size: 10px; }
-#tempTable { right: 25px; }
-#newsSection { position: fixed; left: 30px; bottom: 25px; opacity: .5; }
+#topRight { float: right; width: 400px; height: 600px; }
+#clock { font-size: 85px; width: 100%; text-align: right; }
+#date {  font-size: 25px; width: 100%; text-align: right; }
+#tempNow { width: 100%; overflow: hidden; font-size: 20px;}
+#tempForecast { float: right; font-size: 20px; }
+#newsSection { position: fixed; left: 30px; bottom: 25px; }
 img { width: 30px; height: 30px; }
 td { padding: 5px; width: 30 px; text-align: center; }
 </style>
@@ -60,7 +61,7 @@ var functions = {
 	setTimeout(this.getForecast, param.wth.callDelay); 
 	this.getTimeDate();
 	this.getNews();
-	//this.getTweets();
+	this.getTweets();
   },
 }
 
@@ -183,8 +184,10 @@ functions.getTweets = function() {
 <div id='clock'>Time</div>
 <div id='date'>Date</div>
 
-<table id='tempTable'>
+<div id="tempNow">
+<table align="right">
   <tr>
+    <td id='status0' colspan='2'>Status</td>
     <td id='tempToday' colspan='2'>Temp</td>
     <td>
       <table id = "day0">
@@ -194,79 +197,83 @@ functions.getTweets = function() {
         <tr>
           <td id = "tempMin0">Low</td>
         </tr>
-    </table>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3">
-      <table id="day1">
-        <tr>
-          <td id = "tempMax1">Hi</td>
-          <td id = "tempMin1">Low</td>
-          <td id = "status1">Status</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3">
-      <table id="day2">
-        <tr>
-          <td id = "tempMax2">Hi</td>
-          <td id = "tempMin2">Low</td>
-          <td id = "status2">Status</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3">
-      <table id="day3">
-        <tr>
-          <td id = "tempMax3">Hi</td>
-          <td id = "tempMin3">Low</td>
-          <td id = "status3">Status</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td  colspan="3">
-      <table id="day4">
-        <tr>
-          <td id = "tempMax4">Hi</td>
-          <td id = "tempMin4">Low</td>
-          <td id = "status4">Status</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3">
-      <table id="day5">
-        <tr>
-          <td id = "tempMax5">Hi</td>
-          <td id = "tempMin5">Low</td>
-          <td id = "status5">Status</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="3">
-      <table id="day6">
-        <tr>
-          <td id = "tempMax6">Hi</td>
-          <td id = "tempMin6">Low</td>
-          <td id = "status6">Status</td>
-        </tr>
       </table>
     </td>
   </tr>
 </table>
 </div>
 
-<p id="status0">Status</p>
+<div id="tempForecast">
+<table>
+  <tr>
+    <td>
+      <table id="day1">
+        <tr>
+          <td id = "status1">Status</td>
+          <td id = "tempMax1">Hi</td>
+          <td id = "tempMin1">Low</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table id="day2">
+        <tr>
+          <td id = "status2">Status</td>
+          <td id = "tempMax2">Hi</td>
+          <td id = "tempMin2">Low</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table id="day3">
+        <tr>
+          <td id = "status3">Status</td>
+          <td id = "tempMax3">Hi</td>
+          <td id = "tempMin3">Low</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table id="day4">
+        <tr>
+          <td id = "status4">Status</td>
+          <td id = "tempMax4">Hi</td>
+          <td id = "tempMin4">Low</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table id="day5">
+        <tr>
+          <td id = "status5">Status</td>
+          <td id = "tempMax5">Hi</td>
+          <td id = "tempMin5">Low</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table id="day6">
+        <tr>
+          <td id = "status6">Status</td>
+          <td id = "tempMax6">Hi</td>
+          <td id = "tempMin6">Low</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</div>
+</div>
 
 <div id = "newsSection">
   <p id = "news9">News</p>
@@ -284,6 +291,7 @@ functions.getTweets = function() {
 <div id = "tweets">
   <p id = "tweet0">Tweet</p>
 </div>
+
 
 </body>
 </html>
