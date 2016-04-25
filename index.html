@@ -101,7 +101,10 @@ functions.getForecast = function() {
 	    weekDays[y] = x;
 	  }
 	  document.getElementById('day' + weekDays[0]).setAttribute('class', 'weekend');
-      document.getElementById('day' + weekDays[6]).setAttribute('class', 'weekend');
+          document.getElementById('day' + weekDays[6]).setAttribute('class', 'weekend');
+       	  for (x=1; x<=5; x++) {
+	    document.getElementById('day' + weekDays[x]).className = '';
+	  }
 	  setTimeout(functions.getForecast, param.wth.freq);
     }
   })
