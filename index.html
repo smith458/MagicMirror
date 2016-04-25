@@ -65,6 +65,22 @@ var functions = {
   },
 }
 
+functions.buildTable = function() {
+	var table = document.getElementById("tempTable");
+	for (x=0; x<=6; x++) {
+		var row = table.insertRow(x);
+		var status = row.insertCell(0);
+		var hi = row.insertCell(0);
+		var low = row.insertCell(0);
+		status.innerHTML = "Status";
+		status.id = "status" + x;
+		hi.innerHTML = "Hi";
+		hi.id = "tempMax" + x;
+		low.innerHTML = "Low";
+		low.id = "tempMin" +x;
+	}
+}
+
 functions.getWeather = function() {
   $.ajax({
     type: 'GET',
