@@ -7,13 +7,15 @@
 
 <style>
 html * { font-family: 'Helvetica Neue', 'Helvetica'; color: white; background-color: black; }
-.weekend { border: 2px solid white; }
+.weekend { outline: thin solid; }
+.weekend2 { border: 2px solid white; }
 #topRight { float: right; width: 400px; height: 600px; }
 #clock { font-size: 85px; width: 100%; text-align: right; }
 #date {  font-size: 25px; width: 100%; text-align: right; }
 #tempNow { width: 100%; overflow: hidden; font-size: 20px;}
 #tempForecast { float: right; font-size: 20px; }
 #newsSection { position: fixed; left: 30px; bottom: 25px; }
+#tweets { display: block; margin-left: auto; margin-right: auto; }
 img { width: 30px; height: 30px; }
 td { padding: 5px; width: 30 px; text-align: center; }
 </style>
@@ -21,8 +23,6 @@ td { padding: 5px; width: 30 px; text-align: center; }
 <script>
 //Customizable Parameters
 var param = {
-  'URL' : window.location.protocol + '//' + window.location.host + '/' +
-  		  window.location.pathname.split( '/' ),
 //Weather Parameters
   'wth' : {
     'units'     : 'imperial',
@@ -56,7 +56,8 @@ var param = {
 }
 
 var functions = {
-  'init':function(){
+  'init': function(){
+    this.buildForecastTable();
     this.getWeather();
 	setTimeout(this.getForecast, param.wth.callDelay); 
 	this.getTimeDate();
@@ -65,13 +66,15 @@ var functions = {
   },
 }
 
-functions.buildTable = function() {
-	var table = document.getElementById("tempTable");
-	for (x=0; x<=6; x++) {
-		var row = table.insertRow(x);
+functions.buildForecastTable = function() {
+	var table = document.getElementById("tempForecast");
+	for (x=1; x<=6; x++) {
+		var row = table.insertRow(x-1);
 		var status = row.insertCell(0);
 		var hi = row.insertCell(0);
 		var low = row.insertCell(0);
+		var day = "day" + x;
+		row.id = day;
 		status.innerHTML = "Status";
 		status.id = "status" + x;
 		hi.innerHTML = "Hi";
@@ -114,13 +117,14 @@ functions.getForecast = function() {
 	  for (x=0; x<=6; x++) {
 	    y = x + toDay;
 	    if (y > 6) { y = y - 7; }
-	    weekDays[y] = x;
+	    weekDays[y] = 'day' + x;
 	  }
-	  document.getElementById('day' + weekDays[0]).setAttribute('class', 'weekend');
-          document.getElementById('day' + weekDays[6]).setAttribute('class', 'weekend');
-       	  for (x=1; x<=5; x++) {
-	    document.getElementById('day' + weekDays[x]).className = '';
+	  document.getElementById(weekDays[0]).className = 'weekend';
+      document.getElementById(weekDays[6]).className = 'weekend';
+      for (x=1; x<=5; x++) {
+	    document.getElementById(weekDays[x]).className = '';
 	  }
+	  
 	  setTimeout(functions.getForecast, param.wth.freq);
     }
   })
@@ -188,7 +192,7 @@ functions.getTweets = function() {
       if (currentDate - tweetDate < param.twt.tweetTimeout) {
         document.getElementById("tweet0").innerHTML = data[0].text;
       } else {
-      document.getElementById("tweet0").innerHTML = 'No New Tweets!';
+      document.getElementById("tweets").innerHTML = 'No New Tweets!';
       }
       setTimeout(functions.getTweets, param.twt.freq);
     }
@@ -222,76 +226,8 @@ functions.getTweets = function() {
 </table>
 </div>
 
-<div id="tempForecast">
-<table>
-  <tr>
-    <td>
-      <table id="day1">
-        <tr>
-          <td id = "status1">Status</td>
-          <td id = "tempMax1">Hi</td>
-          <td id = "tempMin1">Low</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table id="day2">
-        <tr>
-          <td id = "status2">Status</td>
-          <td id = "tempMax2">Hi</td>
-          <td id = "tempMin2">Low</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table id="day3">
-        <tr>
-          <td id = "status3">Status</td>
-          <td id = "tempMax3">Hi</td>
-          <td id = "tempMin3">Low</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table id="day4">
-        <tr>
-          <td id = "status4">Status</td>
-          <td id = "tempMax4">Hi</td>
-          <td id = "tempMin4">Low</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table id="day5">
-        <tr>
-          <td id = "status5">Status</td>
-          <td id = "tempMax5">Hi</td>
-          <td id = "tempMin5">Low</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table id="day6">
-        <tr>
-          <td id = "status6">Status</td>
-          <td id = "tempMax6">Hi</td>
-          <td id = "tempMin6">Low</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-</div>
+<table id="tempForecast"></table>
+
 </div>
 
 <div id = "newsSection">
@@ -307,10 +243,7 @@ functions.getTweets = function() {
   <p id = "news0">News</p>
 </div>
 
-<div id = "tweets">
-  <p id = "tweet0">Tweet</p>
-</div>
-
+<div id = "tweets">Tweet</div>
 
 </body>
 </html>
