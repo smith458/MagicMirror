@@ -7,17 +7,18 @@
 
 <style>
 html * { font-family: 'Helvetica Neue', 'Helvetica'; color: white; background-color: black; }
-.weekend { outline: thin solid; }
-.weekend2 { border: 2px solid white; }
-#topRight { float: right; width: 400px; height: 600px; }
+.weekend { outline: thin solid white; }
+img { width: 30px; height: 30px; }
+td { padding: 5px; max-width: 30 px; text-align: center; }
+#topRight { float: right; width: 600px; height: 600px; padding: 20px; }
 #clock { font-size: 85px; width: 100%; text-align: right; }
 #date {  font-size: 25px; width: 100%; text-align: right; }
 #tempNow { width: 100%; overflow: hidden; font-size: 20px;}
+#status0>img { width: 60px; height: 60px; }
+#tempToday { float: right; font-size: 60px; }
 #tempForecast { float: right; font-size: 20px; }
 #newsSection { position: fixed; left: 30px; bottom: 25px; }
 #tweets { display: block; margin-left: auto; margin-right: auto; }
-img { width: 30px; height: 30px; }
-td { padding: 5px; width: 30 px; text-align: center; }
 </style>
 
 <script>
@@ -70,9 +71,9 @@ functions.buildForecastTable = function() {
 	var table = document.getElementById("tempForecast");
 	for (x=1; x<=6; x++) {
 		var row = table.insertRow(x-1);
-		var status = row.insertCell(0);
-		var hi = row.insertCell(0);
 		var low = row.insertCell(0);
+		var hi = row.insertCell(0);
+		var status = row.insertCell(0);
 		var day = "day" + x;
 		row.id = day;
 		status.innerHTML = "Status";
@@ -106,7 +107,7 @@ functions.getForecast = function() {
     success: function (data) {
       for(x=0; x<=6; x++) {
         document.getElementById('tempMin'+x).innerHTML = Math.round(data.list[x].temp.min);
-	    document.getElementById('tempMax'+x).innerHTML = Math.round(data.list[x].temp.max);
+	    document.getElementById('tempMax'+x).innerHTML = Math.round(data.list[x].temp.max); 
 	    var img = "<img src=images/"+data.list[x].weather[0].main+".png />";
 	    document.getElementById('status'+x).innerHTML = img.toLowerCase();
 	  }
@@ -124,7 +125,6 @@ functions.getForecast = function() {
       for (x=1; x<=5; x++) {
 	    document.getElementById(weekDays[x]).className = '';
 	  }
-	  
 	  setTimeout(functions.getForecast, param.wth.freq);
     }
   })
@@ -187,10 +187,11 @@ functions.getTweets = function() {
     type: 'GET',
     dataType: 'json',
     success: function(data) {
+      console.log(data)
       var tweetDate   = Date.parse(data[0].created_at);
       var currentDate = Date.parse(new Date());
       if (currentDate - tweetDate < param.twt.tweetTimeout) {
-        document.getElementById("tweet0").innerHTML = data[0].text;
+        document.getElementById("tweets").innerHTML = data[0].text;
       } else {
       document.getElementById("tweets").innerHTML = 'No New Tweets!';
       }
@@ -206,12 +207,12 @@ functions.getTweets = function() {
 <div id = 'topRight'>
 <div id='clock'>Time</div>
 <div id='date'>Date</div>
-
 <div id="tempNow">
+
 <table align="right">
   <tr>
-    <td id='status0' colspan='2'>Status</td>
-    <td id='tempToday' colspan='2'>Temp</td>
+    <td id='status0' colspan=2>Status</td>
+    <td id='tempToday' colspan=2>Temp</td>
     <td>
       <table id = "day0">
         <tr>
@@ -227,7 +228,6 @@ functions.getTweets = function() {
 </div>
 
 <table id="tempForecast"></table>
-
 </div>
 
 <div id = "newsSection">
