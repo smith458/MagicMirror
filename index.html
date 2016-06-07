@@ -187,14 +187,18 @@ functions.getTweets = function() {
     type: 'GET',
     dataType: 'json',
     success: function(data) {
-      var tweetDate   = Date.parse(data[0].created_at);
-      var currentDate = Date.parse(new Date());
-      if (currentDate - tweetDate < param.twt.tweetTimeout) {
-        document.getElementById("tweets").innerHTML = data[0].text;
+      if (data[0].created_at === undefined) {
+        document.getElementById("tweets").innerHTML = 'No New Tweets!';
       } else {
-      document.getElementById("tweets").innerHTML = 'No New Tweets!';
+        var tweetDate   = Date.parse(data[0].created_at);
+        var currentDate = Date.parse(new Date());
+        if (currentDate - tweetDate < param.twt.tweetTimeout) {
+          document.getElementById("tweets").innerHTML = data[0].text;
+        } else {
+        document.getElementById("tweets").innerHTML = 'No New Tweets!';
+        }
+        setTimeout(functions.getTweets, param.twt.freq);
       }
-      setTimeout(functions.getTweets, param.twt.freq);
     }
   })
 }
