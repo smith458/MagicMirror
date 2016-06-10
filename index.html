@@ -187,7 +187,8 @@ functions.getTweets = function() {
     type: 'GET',
     dataType: 'json',
     success: function(data) {
-      if (data[0].created_at === undefined) {
+      console.log(data);
+      if (data === undefined || data[0] === undefined || data[0].created_at === undefined) {
         document.getElementById("tweets").innerHTML = 'No New Tweets!';
       } else {
         var tweetDate   = Date.parse(data[0].created_at);
