@@ -187,10 +187,7 @@ functions.getTweets = function() {
     type: 'GET',
     dataType: 'json',
     success: function(data) {
-      console.log(data);
-      if (data === undefined || data[0] === undefined || data[0].created_at === undefined) {
-        document.getElementById("tweets").innerHTML = 'No New Tweets!';
-      } else {
+      try {
         var tweetDate   = Date.parse(data[0].created_at);
         var currentDate = Date.parse(new Date());
         if (currentDate - tweetDate < param.twt.tweetTimeout) {
@@ -199,7 +196,10 @@ functions.getTweets = function() {
         document.getElementById("tweets").innerHTML = 'No New Tweets!';
         }
         setTimeout(functions.getTweets, param.twt.freq);
-      }
+      } catch(err) {
+        console.log(err);
+        document.getElementById("tweets").innerHTML = 'No New Tweets!';
+      }	
     }
   })
 }
