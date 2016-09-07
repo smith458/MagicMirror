@@ -11,6 +11,10 @@
 
 <script>
 
+setTimeout(function(){
+   window.location.reload(1);
+}, 3600000);
+
 var param = {
   "units"     : "imperial",
   "city"      : "Indianapolis,US",
