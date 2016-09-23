@@ -6,7 +6,16 @@
 <script src="http://code.jquery.com/ui/1.7.0/jquery-ui.js" ></script>
 
 <style>
-.weekend { border: 2px solid Black; }
+.weekend {
+	border: 2px solid Black;
+}
+
+.tweet {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
 </style>
 
 <script>

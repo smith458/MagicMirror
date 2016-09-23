@@ -18,10 +18,15 @@ td { padding: 5px; max-width: 30 px; text-align: center; }
 #tempToday { float: right; font-size: 60px; }
 #tempForecast { float: right; font-size: 20px; }
 #newsSection { position: fixed; left: 30px; bottom: 25px; }
-#tweets { display: block; margin-left: auto; margin-right: auto; }
+#tweets { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 </style>
 
 <script>
+
+setTimeout(function(){
+   window.location.reload(1);
+}, 3600000);
+
 //Customizable Parameters
 var param = {
 //Weather Parameters
@@ -190,18 +195,18 @@ functions.getTweets = function() {
     dataType: 'json',
     success: function(data) {
       console.log(data);
+      setTimeout(functions.getTweets, param.twt.freq);
       try {
         var tweetDate   = Date.parse(data[0].created_at);
         var currentDate = Date.parse(new Date());
         if (currentDate - tweetDate < param.twt.tweetTimeout) {
           document.getElementById("tweets").innerHTML = data[0].text;
         } else {
-        document.getElementById("tweets").innerHTML = 'No New Tweets!';
+        document.getElementById("tweets").innerHTML = '';
         }
-        setTimeout(functions.getTweets, param.twt.freq);
       } catch(err) {
         console.log(err);
-        document.getElementById("tweets").innerHTML = 'No New Tweets!';
+        document.getElementById("tweets").innerHTML = '';
       }	
     }
   })
