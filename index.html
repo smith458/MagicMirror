@@ -12,7 +12,7 @@ img { width: 30px; height: 30px; }
 td { padding: 5px; max-width: 30 px; text-align: center; }
 #topRight { float: right; width: 600px; height: 600px; padding: 20px; }
 #clock { font-size: 85px; width: 100%; text-align: right; }
-#date {  font-size: 25px; width: 100%; text-align: right; }
+#date {  font-size: 23px; width: 100%; text-align: right; }
 #tempNow { width: 100%; overflow: hidden; font-size: 20px;}
 #status0>img { width: 60px; height: 60px; }
 #tempToday { float: right; font-size: 60px; }
@@ -61,6 +61,7 @@ var param = {
   },
 }
 
+//Starts all of the functions. Runs on page load.
 var functions = {
   'init': function(){
     this.buildForecastTable();
@@ -72,6 +73,7 @@ var functions = {
   },
 }
 
+//Builds the table for the weather forecast
 functions.buildForecastTable = function() {
 	var table = document.getElementById("tempForecast");
 	for (x=1; x<=6; x++) {
@@ -90,6 +92,7 @@ functions.buildForecastTable = function() {
 	}
 }
 
+//Gets the weather for today
 functions.getWeather = function() {
   $.ajax({
     type: 'GET',
@@ -103,6 +106,7 @@ functions.getWeather = function() {
   })
 }
 
+//Gets Weather for the rest of the week
 functions.getForecast = function() {
   $.ajax({
     type: 'GET',
@@ -134,7 +138,7 @@ functions.getForecast = function() {
     }
   })
 }
- 
+
 functions.getTimeDate = function() {
   var d      = new Date()
   var hour   = d.getHours();
