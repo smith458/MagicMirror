@@ -6,6 +6,8 @@
 <script src='libraries/jquery.feedToJSON.js'></script>
 
 <style>
+* { cursor: none; }
+body { margin-top: 50px; }
 html * { font-family: 'Helvetica Neue', 'Helvetica'; color: white; background-color: black; }
 .weekend { outline: thin solid white; }
 img { width: 30px; height: 30px; }
@@ -18,11 +20,10 @@ td { padding: 5px; max-width: 30 px; text-align: center; }
 #tempToday { float: right; font-size: 60px; }
 #tempForecast { float: right; font-size: 20px; }
 #newsSection { position: fixed; left: 30px; bottom: 25px; }
-#tweets { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+#tweets { position: fixed; left: 30px; bottom: 450px; }
 </style>
 
 <script>
-
 setTimeout(function(){
    window.location.reload(1);
 }, 3600000);
