@@ -19,7 +19,7 @@ td { padding: 5px; max-width: 30 px; text-align: center; }
 #status0>img { width: 60px; height: 60px; }
 #tempToday { float: right; font-size: 60px; }
 #tempForecast { float: right; font-size: 22px; }
-#newsSection { position: fixed; left: 30px; bottom: 45px; font-size: 16px }
+#newsSection { position: fixed; left: 30px; bottom: 45px; font-size: 18px }
 #tweets { position: fixed; left: 30px; top: 110px; font-size: 18px }
 </style>
 
@@ -185,7 +185,7 @@ functions.getTimeDate = function() {
 
 functions.getNews = function() {
   $.feedToJson({
-  feed: param.nws.feed.news,
+  feed: param.nws.feed.sports,
   success: function(data){
     for(x=0; x<=9; x++) {
       document.getElementById('news'+x).innerHTML = data.item[x].title;
